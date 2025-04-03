@@ -94,8 +94,7 @@ app.get('/orders', (req, res) => {
   try {
     // Create a response object with well-defined schema
     const response = {
-      status: 'success',
-      count: Object.keys(orders).length,
+
       data: orders
     };
 
@@ -115,7 +114,6 @@ app.get('/orders/:id', (req, res) => {
     if (order) {
       // Return detailed order info with proper schema
       const response = {
-        status: 'success',
         data: {
           order_number: order.order_number,
           customer_name: order.customer_name,
