@@ -3,23 +3,23 @@ const router = express.Router();
 const orders = require('../data/orders');
 
 // Get all orders with proper schema in response
-// router.get('/', (req, res) => {
-//   try {
-//     // Create a response object with well-defined schema
-//     const response = {
-//       status: 'success',
-//       count: Object.keys(orders).length,
-//       data: orders
-//     };
+router.get('/', (req, res) => {
+  try {
+    // Create a response object with well-defined schema
+    const response = {
+      status: 'success',
+      count: Object.keys(orders).length,
+      data: orders
+    };
 
-//     res.json(response);
-//   } catch (error) {
-//     res.status(500).json({
-//       status: 'error',
-//       message: error.message
-//     });
-//   }
-// });
+    res.json(response);
+  } catch (error) {
+    res.status(500).json({
+      status: 'error',
+      message: error.message
+    });
+  }
+});
 
 // Get a specific order by ID with detailed information
 router.get('/:id', (req, res) => {
