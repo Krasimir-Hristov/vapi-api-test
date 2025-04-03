@@ -2,7 +2,7 @@
 import fetch from 'node-fetch';
 
 // Your deployed API URL
-const API_URL = 'https://vapi-api-test-6v1tmql87-krasimirhristovs-projects.vercel.app';
+const API_URL = 'https://vapi-api-test.vercel.app';
 
 // Test GET request with better error handling
 async function testGetRequest(endpoint) {
@@ -96,6 +96,9 @@ async function runTests() {
 
   // Test the test endpoint with query params
   await testGetRequest('/api/test?foo=bar&test=true');
+
+  // Test the orders endpoint
+  await testGetRequest('/orders');
 }
 
 runTests();

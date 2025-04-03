@@ -2,7 +2,7 @@
 import fetch from 'node-fetch';
 
 // Your deployed API URL
-const BASE_URL = 'https://vapi-api-test-6v1tmql87-krasimirhristovs-projects.vercel.app';
+const BASE_URL = 'https://vapi-api-test.vercel.app';
 
 // Test different URL patterns
 async function testUrl(url) {

@@ -20,7 +20,8 @@ app.get('/api', (req, res) => {
     endpoints: [
       { path: '/', method: 'GET', description: 'API root' },
       { path: '/api', method: 'GET', description: 'API info' },
-      { path: '/api/test', method: 'GET', description: 'Test endpoint' }
+      { path: '/api/test', method: 'GET', description: 'Test endpoint' },
+      { path: '/orders', method: 'GET', description: 'Get all orders' }
     ]
   });
 });
@@ -35,6 +36,46 @@ app.get('/api/test', (req, res) => {
       query: req.query,
       ip: req.ip
     }
+  });
+});
+
+// Orders endpoint - return all orders
+app.get('/orders', (req, res) => {
+  // For now, we'll return mock data
+  const mockOrders = [
+    {
+      id: '1',
+      customer: 'John Doe',
+      product: 'Widget A',
+      quantity: 2,
+      price: 19.99,
+      date: '2025-04-01',
+      status: 'delivered'
+    },
+    {
+      id: '2',
+      customer: 'Jane Smith',
+      product: 'Widget B',
+      quantity: 1,
+      price: 29.99,
+      date: '2025-04-02',
+      status: 'processing'
+    },
+    {
+      id: '3',
+      customer: 'Bob Johnson',
+      product: 'Widget C',
+      quantity: 3,
+      price: 15.99,
+      date: '2025-04-03',
+      status: 'shipped'
+    }
+  ];
+
+  res.json({
+    message: 'Orders retrieved successfully',
+    count: mockOrders.length,
+    orders: mockOrders
   });
 });
 
