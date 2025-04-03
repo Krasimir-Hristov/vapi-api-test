@@ -13,29 +13,15 @@ app.get('/', (req, res) => {
   res.json({ message: 'Welcome to the API', status: 'operational' });
 });
 
-// Example API endpoint
+// API info endpoint
 app.get('/api', (req, res) => {
   res.json({
     message: 'API is working!',
     endpoints: [
       { path: '/', method: 'GET', description: 'API root' },
       { path: '/api', method: 'GET', description: 'API info' },
-      { path: '/api/test', method: 'GET', description: 'Test endpoint' },
       { path: '/orders', method: 'GET', description: 'Get all orders' }
     ]
-  });
-});
-
-// Simple test endpoint that returns timestamp and request info
-app.get('/api/test', (req, res) => {
-  res.json({
-    message: 'Test endpoint successful',
-    timestamp: new Date().toISOString(),
-    requestInfo: {
-      headers: req.headers,
-      query: req.query,
-      ip: req.ip
-    }
   });
 });
 
