@@ -111,9 +111,9 @@ app.get('/orders', (req, res) => {
 // Get a specific order by ID with detailed information
 app.get('/orders/:id', (req, res) => {
   try {
-    const order = orders[req.params.id];  // This is where the order is being fetched
+    console.log("Order number from params:", req.params.id);
+    const order = orders[req.params.id];
     if (order) {
-      // Return detailed order info with proper schema
       const response = {
         data: {
           order_number: order.order_number,
@@ -125,7 +125,6 @@ app.get('/orders/:id', (req, res) => {
           shipping_address: order.shipping_address
         }
       };
-
       res.json(response);
     } else {
       res.status(404).json({
@@ -140,79 +139,6 @@ app.get('/orders/:id', (req, res) => {
     });
   }
 });
-
-
-// Create a new order with schema validation
-app.post('/orders', (req, res) => {
-  try {
-    const newOrder = req.body;
-
-    if (!newOrder.order_number || orders[newOrder.order_number]) {
-      return res.status(400).json({
-        status: 'error',
-        message: "Invalid order number or order already exists"
-      });
-    }
-
-    // Validate required fields
-    const requiredFields = ['customer_name', 'items', 'total_amount', 'status', 'shipping_address'];
-    for (const field of requiredFields) {
-      if (!newOrder[field]) {
-        return res.status(400).json({
-          status: 'error',
-          message: `Missing required field: ${field}`
-        });
-      }
-    }
-
-    // Add order date if not provided
-    if (!newOrder.order_date) {
-      newOrder.order_date = new Date();
-    }
-
-    orders[newOrder.order_number] = newOrder;
-
-    res.status(201).json({
-      status: 'success',
-      data: newOrder
-    });
-  } catch (error) {
-    res.status(500).json({
-      status: 'error',
-      message: error.message
-    });
-  }
-});
-
-// Update an existing order
-app.put('/orders/:id', (req, res) => {
-  try {
-    const orderId = req.params.id;
-
-    if (!orders[orderId]) {
-      return res.status(404).json({
-        status: 'error',
-        message: "Order not found"
-      });
-    }
-
-    orders[orderId] = { ...orders[orderId], ...req.body };
-
-    res.json({
-      status: 'success',
-      data: orders[orderId]
-    });
-  } catch (error) {
-    res.status(500).json({
-      status: 'error',
-      message: error.message
-    });
-  }
-});
-
-
-
-
 
 
 
