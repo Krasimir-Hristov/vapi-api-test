@@ -1,4 +1,5 @@
-const fetch = require('node-fetch');
+// Import node-fetch as ESM module (for v3)
+import fetch from 'node-fetch';
 
 // Your deployed API URL
 const API_URL = 'https://vapi-api-test-6v1tmql87-krasimirhristovs-projects.vercel.app';

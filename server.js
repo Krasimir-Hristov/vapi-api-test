@@ -1,5 +1,5 @@
-const express = require('express');
-const cors = require('cors');
+import express from 'express';
+import cors from 'cors';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -46,4 +46,4 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 // Export the Express API for serverless functions
-module.exports = app;
+export default app;
