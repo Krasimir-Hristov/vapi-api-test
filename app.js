@@ -25,7 +25,7 @@ const orders = {
       { product: "Mouse", quantity: 1, price: 29.99 }
     ],
     total_amount: 1029.98,
-    order_date: new Date(2024, 2, 15, 14, 30), // Note: Month is 0-based in JavaScript
+    order_date: new Date(2024, 2, 15, 14, 30), // Month is 0-based in JavaScript
     status: "Delivered",
     shipping_address: "123 Main St, New York, NY 10001"
   },
@@ -54,6 +54,7 @@ const orders = {
     shipping_address: "789 Pine Rd, Chicago, IL 60601"
   }
 };
+
 
 // Add documentation route
 app.get('/', (req, res) => {
@@ -110,7 +111,7 @@ app.get('/orders', (req, res) => {
 // Get a specific order by ID with detailed information
 app.get('/orders/:id', (req, res) => {
   try {
-    const order = orders[req.params.id];
+    const order = orders[req.params.id];  // This is where the order is being fetched
     if (order) {
       // Return detailed order info with proper schema
       const response = {
@@ -139,6 +140,7 @@ app.get('/orders/:id', (req, res) => {
     });
   }
 });
+
 
 // Create a new order with schema validation
 app.post('/orders', (req, res) => {
@@ -208,48 +210,11 @@ app.put('/orders/:id', (req, res) => {
   }
 });
 
-// Delete an order
-app.delete('/orders/:id', (req, res) => {
-  try {
-    const orderId = req.params.id;
 
-    if (!orders[orderId]) {
-      return res.status(404).json({
-        status: 'error',
-        message: "Order not found"
-      });
-    }
 
-    delete orders[orderId];
 
-    res.status(200).json({
-      status: 'success',
-      message: 'Order deleted successfully'
-    });
-  } catch (error) {
-    res.status(500).json({
-      status: 'error',
-      message: error.message
-    });
-  }
-});
 
-// Error handling middleware
-app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).json({
-    status: 'error',
-    message: 'Something went wrong!'
-  });
-});
 
-// 404 handler
-app.use((req, res) => {
-  res.status(404).json({
-    status: 'error',
-    message: 'Endpoint not found'
-  });
-});
 
 // Server
 const server = app.listen(PORT, () => {
