@@ -1,5 +1,6 @@
 import express from 'express';
 import cors from 'cors';
+import { orders_db } from './db.js';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -20,58 +21,56 @@ app.get('/api', (req, res) => {
     endpoints: [
       { path: '/', method: 'GET', description: 'API root' },
       { path: '/api', method: 'GET', description: 'API info' },
-      { path: '/orders', method: 'GET', description: 'Get all orders' }
+      { path: '/orders', method: 'GET', description: 'Get all orders' },
+      { path: '/orders', method: 'POST', description: 'Get order by order number' }
     ]
   });
 });
 
-// Orders endpoint - return all orders with the new structure
+// GET all orders endpoint
 app.get('/orders', (req, res) => {
-  // Mock data for orders using the new structure
-  const mockOrders = {
-    "101": {
-      order_number: "101",
-      customer_name: "John Doe",
-      items: [
-        { "product": "Laptop", "quantity": 1, "price": 999.99 },
-        { "product": "Mouse", "quantity": 1, "price": 29.99 }
-      ],
-      total_amount: 1029.98,
-      order_date: "2024-03-15T14:30:00",
-      status: "Delivered",
-      shipping_address: "123 Main St, New York, NY 10001"
-    },
-    "102": {
-      order_number: "102",
-      customer_name: "Jane Smith",
-      items: [
-        { "product": "Headphones", "quantity": 2, "price": 79.99 },
-        { "product": "Phone Case", "quantity": 1, "price": 19.99 }
-      ],
-      total_amount: 179.97,
-      order_date: "2024-03-16T09:15:00",
-      status: "Processing",
-      shipping_address: "456 Oak Ave, Los Angeles, CA 90001"
-    },
-    "103": {
-      order_number: "103",
-      customer_name: "Bob Johnson",
-      items: [
-        { "product": "Smart Watch", "quantity": 1, "price": 299.99 },
-        { "product": "Charger", "quantity": 1, "price": 24.99 }
-      ],
-      total_amount: 324.98,
-      order_date: "2024-03-17T11:45:00",
-      status: "Shipped",
-      shipping_address: "789 Pine Rd, Chicago, IL 60601"
-    }
-  };
-
   res.json({
     message: 'Orders retrieved successfully',
-    count: Object.keys(mockOrders).length,
-    orders: mockOrders
+    count: Object.keys(orders_db).length,
+    orders: orders_db
   });
+});
+
+// POST order lookup - equivalent to the Flask /orders POST endpoint
+app.post('/orders', (req, res) => {
+  const data = req.body;
+
+  // Check if JSON is valid (Express already handles this, but keeping for clarity)
+  if (!data) {
+    return res.status(400).json({ error: 'Invalid JSON' });
+  }
+
+  // Check for required orderNumber field
+  if (!data.orderNumber) {
+    return res.status(400).json({ error: 'Missing orderNumber' });
+  }
+
+  const orderNumber = data.orderNumber;
+
+  // Check if order exists in database
+  if (orderNumber in orders_db) {
+    const order = orders_db[orderNumber];
+
+    // Format date to match Python's ISO format
+    const formattedDate = order.order_date.toISOString();
+
+    return res.json({
+      order_number: order.order_number,
+      customer_name: order.customer_name,
+      order_date: formattedDate,
+      total_amount: order.total_amount,
+      status: order.status,
+      shipping_address: order.shipping_address
+    });
+  }
+
+  // If order not found
+  return res.status(404).json({ error: 'Order not found' });
 });
 
 // Start the server if we're not in production (Vercel handles this in prod)
